@@ -1,7 +1,6 @@
 package com.jasonnerothin
 
 import org.scalatest.FunSuite
-import org.scalamock.scalatest.MockFactory
 
 /**
   * Created by IntelliJ IDEA.
@@ -25,7 +24,6 @@ import org.scalamock.scalatest.MockFactory
   *
   */
 class LittleOldTest extends FunSuite {
-//with MockFactory {
 
   test("that gradle will run my test successfully"){
 
