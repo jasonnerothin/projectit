@@ -11,8 +11,8 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.5'
     compile 'ch.qos.logback:logback-classic:1.0.13'
 
-    compile 'com.gigaspaces:gs-runtime:9.6.2-GA'
-    runtime 'com.gigaspaces:gs-openspaces:9.6.2-GA'
+    runtime 'com.gigaspaces:gs-runtime:9.6.2-GA'
+    compile 'com.gigaspaces:gs-openspaces:9.6.2-GA'
     /*-- for mock sugar --*/
 
     compile 'org.scalatest:scalatest_2.10:1.9.1'
