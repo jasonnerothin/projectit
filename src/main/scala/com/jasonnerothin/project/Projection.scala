@@ -21,9 +21,8 @@ package com.jasonnerothin.project
   *
   */
 
-/** A hypothetical projection function. Incorrect implementation since it is
-  * not invertible. Since we can't get y and z out of the co-domain of the apply
-  * function, any reasonable implementation based upon this definition would be lossy.
+/** A projection function that would work for our implementation, but won't be
+  * very memory efficient.
   */
 trait Projection {
 
@@ -61,7 +60,7 @@ trait Projection {
     * @return a point
     */
   def function(p: Point): Point = {
-    Point(p.x, 0, 0)
+    Point(p.bigInt)
   }
 
   /** A function to get us from 1-dimension back out to 3-dimensions.
@@ -72,17 +71,24 @@ trait Projection {
     * @return a point in 3-dimensions
     */
   def inverse(p: Point): Point = {
-    Point(p.x, 1, 1)
-    //    throw new UnsupportedOperationException("This implementation is lossy. Undefined.")
+    Point(p.bigInt)
   }
 
 }
 
-/** A simple case class representing a point in 3-D space.
-  * @param x x-component
-  * @param y y-component
-  * @param z z-component
+/** A simple class representing a point in 3-D space.
   */
-case class Point(x: Int, y: Int, z: Int) {
-  def asInt: Int = x
+case class Point(bigInt: BigInt)
+
+object Point extends BitTwiddling{
+
+  implicit def xyzToBigInt(arr: Array[Int]) : BigInt = {
+    require(arr.length == 3)
+    BigInt.int2bigInt(arr(0)) | offsetLarger(arr(1), 32) | offsetLarger(arr(2), 64)
+  }
+
+  def apply(x:Int, y:Int, z:Int) : Point = {
+    new Point(Array(x,y,z))
+  }
+
 }

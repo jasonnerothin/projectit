@@ -2,8 +2,7 @@ package com.jasonnerothin
 
 import org.scalatest.FunSuite
 
-/**
-  * Created by IntelliJ IDEA.
+/** Created by IntelliJ IDEA.
   * User: jason
   * Date: 2/18/14
   * Time: 2:56 AM
