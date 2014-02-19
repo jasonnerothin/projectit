@@ -78,7 +78,15 @@ trait Projection {
 
 /** A simple class representing a point in 3-D space.
   */
-case class Point(bigInt: BigInt)
+case class Point(bigInt: BigInt) extends BitTwiddling{
+
+  def x = lowInt(bigInt)
+
+  def y = middleInt(bigInt)
+
+  def z = highInt(bigInt)
+
+}
 
 object Point extends BitTwiddling{
 

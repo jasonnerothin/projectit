@@ -37,7 +37,7 @@ object Main {
     ))
 
     val seq = inOneDimension map {
-      case (p: Point) => p.bigInt
+      case (p: Point) => "(" + p.x +","+ p.y + ","+ p.z + ")"
     }
 
     println(seq)
