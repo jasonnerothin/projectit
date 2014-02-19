@@ -35,7 +35,7 @@ trait Projection {
     */
   def apply(points: Seq[Point]): Seq[Point] = {
     points map {
-      case Some(pnt: Point) => function(pnt)
+      case pnt: Point => function(pnt)
     }
   }
 
@@ -48,7 +48,7 @@ trait Projection {
     */
   def unapply(points: Seq[Point]): Seq[Point] = {
     points map {
-      case Some(pnt: Point) => inverse(pnt)
+      case pnt: Point => inverse(pnt)
     }
   }
 
