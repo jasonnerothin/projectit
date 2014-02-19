@@ -22,4 +22,6 @@ package com.jasonnerothin
   */
 package object project {
 
+  val IntWidth = 10
+
 }

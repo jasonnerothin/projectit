@@ -25,13 +25,13 @@ trait BitTwiddling {
   }
 
   def middleInt(bigInt: BigInt) : Int = {
-    require( bigInt.bitLength > 32 )
-    (bigInt >> 32).toInt
+    require( bigInt.bitLength > IntWidth )
+    (bigInt >> IntWidth ).toInt
   }
 
   def highInt(bigInt: BigInt) : Int = {
-    require( bigInt.bitLength > 64 )
-    (bigInt >> 64).toInt
+    require( bigInt.bitLength > IntWidth * 2 )
+    (bigInt >> IntWidth * 2 ).toInt
   }
 
 }

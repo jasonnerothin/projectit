@@ -90,9 +90,15 @@ case class Point(bigInt: BigInt) extends BitTwiddling{
 
 object Point extends BitTwiddling{
 
+  val tooBig = 2^IntWidth + 1
+
   implicit def xyzToBigInt(arr: Array[Int]) : BigInt = {
     require(arr.length == 3)
-    BigInt.int2bigInt(arr(0)) | offsetLarger(arr(1), 32) | offsetLarger(arr(2), 64)
+    val x = arr(0)
+    val y = arr(1)
+    val z = arr(2)
+    require( x < tooBig && y < tooBig && z < tooBig )
+    BigInt.int2bigInt(x) | BigInt.int2bigInt(y) << IntWidth | BigInt.int2bigInt(z) << IntWidth
   }
 
   def apply(x:Int, y:Int, z:Int) : Point = {

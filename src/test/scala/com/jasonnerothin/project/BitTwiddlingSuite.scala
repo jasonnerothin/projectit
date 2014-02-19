@@ -78,7 +78,7 @@ class BitTwiddlingSuite extends FunSuite {
     val expected = 42
 
     val fortyTwo = BigInt.int2bigInt(expected)
-    val andThenSome = fortyTwo << 32
+    val andThenSome = fortyTwo << IntWidth
 
     val result = systemUnderTest.middleInt(andThenSome)
 
@@ -95,7 +95,7 @@ class BitTwiddlingSuite extends FunSuite {
   test("highInt returns the greatest Int form a 96-bit BigInt"){
     val expected = 1
     val one = BigInt.int2bigInt(expected)
-    val stillTheOne = systemUnderTest.highInt(one << 64)
+    val stillTheOne = systemUnderTest.highInt(one << IntWidth * 2)
 
     assert( stillTheOne === expected )
   }
