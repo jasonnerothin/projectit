@@ -4,6 +4,23 @@ repositories {
     mavenCentral()
 }
 
+localRepo = "$System.env.M2_REPO"
+ensureDirectory(localRepo)
+gsFolder = localRepo + '/com/gigaspaces/'
+ensureDirectory(gsFolder)
+jsHomedir = "$System.env.JSHOMEDIR"
+ensureDirectory(jsHomedir)
+gsScalaLibDir = jsHomedir + '/lib/platform/scala/'
+ensureDirectory(gsScalaLibDir)
+
+def ensureDirectory(String directoryPath) {
+    dir = new File(directoryPath)
+    if (!dir.exists())
+        throw new IllegalStateException(String.format("Directory %s does not exist.", directoryPath))
+    if (!dir.isDirectory())
+        throw new IllegalStateException(String.format("File %s is not a directory.", directoryPath))
+}
+
 dependencies {
 
     compile 'org.scala-lang:scala-library:2.10.3'
@@ -11,8 +28,9 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.5'
     compile 'ch.qos.logback:logback-classic:1.0.13'
 
-//    runtime 'com.gigaspaces:gs-runtime:9.6.2-GA'
-//    compile 'com.gigaspaces:gs-openspaces:9.6.2-GA'
+    compile files(gsFolder + 'gs-openspaces/9.7.0-10496-RELEASE/gs-openspaces-9.7.0-10496-RELEASE.jar')
+    compile files(gsFolder + 'gs-runtime/9.7.0-10496-RELEASE/gs-runtime-9.7.0-10496-RELEASE.jar')
+    compile files(gsScalaLibDir + 'gs-openspaces-scala.jar')
 
     testCompile 'org.scalatest:scalatest_2.10:2.0'
     testCompile 'org.scalamock:scalamock-scalatest-support_2.10:3.0.1'

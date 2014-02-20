@@ -1,9 +1,9 @@
 .idea
 .classpath
 .project
-.iws
-.ipr
-.iml
+*.iws
+*.ipr
+*.iml
 *.class
 bin/
 target/
