@@ -16,14 +16,27 @@
 
 package com.jasonnerothin.project.hrmodel
 
+//import org.openspaces.scala.core.aliases.annotation._
+import com.gigaspaces.annotation.pojo.{SpaceProperty, SpaceId, SpaceClassConstructor}
 import scala.beans.BeanProperty
-import com.gigaspaces.annotation.pojo.SpaceClassConstructor
 
 /**
  * Created by IntelliJ IDEA.
  * User: jason
  * Date: 2/20/14
  * Time: 10:19 AM
- * Provides...
  */
-case class Salary @SpaceClassConstructor() ()
+case class Salary @SpaceClassConstructor()
+(
+
+  @BeanProperty
+  @SpaceProperty(nullValue = "-1")
+  @SpaceId
+  id: Long = -1,
+
+  @BeanProperty
+  @SpaceProperty(nullValue = "-1")
+  @SpaceId
+  perAnnum: Double = -1
+
+)
