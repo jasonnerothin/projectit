@@ -88,7 +88,7 @@ case class Point(bigInt: BigInt) extends BitTwiddling{
 
 }
 
-object Point extends BitTwiddling{
+object Point {
 
   val tooBig = 2^IntWidth + 1
 
