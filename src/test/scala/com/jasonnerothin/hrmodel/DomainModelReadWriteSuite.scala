@@ -17,18 +17,31 @@
 package com.jasonnerothin.hrmodel
 
 import com.jasonnerothin.GsI10nSuite
+import com.jasonnerothin.project.hrmodel.Salary
+import org.scalatest.{Assertions, ConfigMap}
 
 /** Created by IntelliJ IDEA.
   * User: jason
   * Date: 2/27/14
   * Time: 3:20 PM
   */
-class DomainModelReadWriteSuite extends GsI10nSuite{
+class DomainModelReadWriteSuite extends GsI10nSuite {
 
-  test("read write Employee") (pending)
+  override def beforeEach(configMap: ConfigMap): Unit = {
+    assume(spaceContents() == 0)
+  }
 
-  test("read write JobDescription") (pending)
+  test("read write Employee")(pending)
 
-  test("read write Salary") (pending)
+  test("read write JobDescription")(pending)
+
+  test("read write Salary") {
+
+    val salary = Salary(32, 100000)
+    val lc = gigaSpace.write(salary)
+
+    assert(lc != null)
+
+  }
 
 }
