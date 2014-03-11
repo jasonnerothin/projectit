@@ -90,6 +90,8 @@ case class Point(bigInt: BigInt) extends BitTwiddling{
 
 object Point {
 
+  import scala.language.implicitConversions
+
   val tooBig = 2^IntWidth + 1
 
   implicit def xyzToBigInt(arr: Array[Int]) : BigInt = {
