@@ -63,6 +63,7 @@ tasks.withType(ScalaCompile) {
         memoryMaximumSize = '4g'
         jvmArgs = ['-XX:MaxPermSize=512m']
     }
+    scalaCompileOptions.setAdditionalParameters(['-feature'])
 }
 
 task test(overwrite: true, dependsOn: testClasses) << {
