@@ -36,7 +36,6 @@ case class Salary @SpaceClassConstructor()
 
   @BeanProperty
   @SpaceProperty(nullValue = "-1")
-  @SpaceId
   perAnnum: Double = -1
 
 )

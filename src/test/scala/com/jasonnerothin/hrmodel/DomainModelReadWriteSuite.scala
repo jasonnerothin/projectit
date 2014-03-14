@@ -19,6 +19,9 @@ package com.jasonnerothin.hrmodel
 import com.jasonnerothin.GsI10nSuite
 import com.jasonnerothin.project.hrmodel.Salary
 import org.scalatest.ConfigMap
+import com.sun.servicetag.SystemEnvironment
+import scala.sys.SystemProperties
+import java.util.NoSuchElementException
 
 /** Created by IntelliJ IDEA.
   * User: jason
@@ -29,6 +32,41 @@ class DomainModelReadWriteSuite extends GsI10nSuite {
 
   override def beforeEach(configMap: ConfigMap): Unit = {
     assume(spaceContents() == 0)
+  }
+
+  ignore("negative control") {
+    assert(1 + 1 + 1 === 2)
+  }
+
+  test("positive control") {
+    assert(1 + 1 === 2)
+  }
+
+  test("properties can be read from the gradle test file") {
+
+    var propName = "HOME"
+    system(propName)
+    env(propName)
+
+    propName = "com.gs.protectiveMode.typeWithoutId"
+    system(propName)
+    env(propName)
+
+
+  }
+
+  private def env(propName: String): Unit = {
+    try {
+      println(String.format("Environment prop name: [%s], prop value [%s]", propName, sys.env(propName)))
+    } catch {
+      case e: NoSuchElementException => println(String.format("Environment prop NOT FOUND: [%s]", propName))
+      case e: Throwable => fail(e)
+    }
+  }
+
+  private def system(propName: String): Unit = {
+    val props = new SystemProperties
+    println(String.format("System prop name: [%s], prop value [%s]", propName, props.get(propName)))
   }
 
   test("read write Employee")(pending)

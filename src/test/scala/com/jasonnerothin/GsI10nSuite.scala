@@ -161,8 +161,4 @@ abstract class GsI10nSuite extends FunSuite with BeforeAndAfterAllConfigMap with
     containerProvider.createContainer()
   }
 
-  test("failing test, on purpose") {
-    assert(1 + 1 + 1 === 2)
-  }
-
 }
