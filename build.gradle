@@ -4,7 +4,6 @@ repositories {
     mavenCentral()
 }
 
-springVersion = '3.2.4.RELEASE'
 gigaSpacesVersion = '9.7.0-10496-RELEASE'
 
 localRepo = "$System.env.M2_REPO"
@@ -15,8 +14,6 @@ jsHomedir = "$System.env.JSHOMEDIR"
 ensureDirectory(jsHomedir)
 gsScalaLibDir = jsHomedir + '/lib/platform/scala/'
 ensureDirectory(gsScalaLibDir)
-gsRuntimeLibDir = jsHomedir + '/lib/required/'
-ensureDirectory(gsRuntimeLibDir)
 
 def ensureDirectory(String directoryPath) {
     dir = new File(directoryPath)
@@ -37,24 +34,22 @@ dependencies {
     compile files(gsFolder + 'gs-runtime/' + gigaSpacesVersion + '/gs-runtime-' + gigaSpacesVersion + '.jar')
     compile files(gsScalaLibDir + 'gs-openspaces-scala.jar')
 
-    testCompile files(gsRuntimeLibDir + 'gs-openspaces.jar')
-    testCompile files(gsRuntimeLibDir + 'gs-runtime.jar')
-    testCompile files(gsRuntimeLibDir + 'com.springsource.org.aopalliance-1.0.0.jar')
-    testCompile files(gsRuntimeLibDir + 'commons-logging-1.1.3.jar')
-    testCompile files(gsRuntimeLibDir + 'gs-openspaces.jar')
-    testCompile files(gsRuntimeLibDir + 'gs-runtime.jar')
-    testCompile files(gsRuntimeLibDir + 'spring-aop-' + springVersion + '.jar')
-    testCompile files(gsRuntimeLibDir + 'spring-aspects-' + springVersion + '.jar')
-    testCompile files(gsRuntimeLibDir + 'spring-beans-' + springVersion + '.jar')
-    testCompile files(gsRuntimeLibDir + 'spring-context-' + springVersion + '.jar')
-    testCompile files(gsRuntimeLibDir + 'spring-context-support-' + springVersion + '.jar')
-    testCompile files(gsRuntimeLibDir + 'spring-core-' + springVersion + '.jar')
-    testCompile files(gsRuntimeLibDir + 'spring-expression-' + springVersion + '.jar')
-    testCompile files(gsRuntimeLibDir + 'spring-tx-' + springVersion + '.jar')
     testCompile 'org.scalatest:scalatest_2.10:2.0'
     testCompile 'org.scalamock:scalamock-scalatest-support_2.10:3.0.1'
     testCompile 'org.scalamock:scalamock-specs2-support_2.10:3.0.1'
     testCompile 'junit:junit:4.11'
+
+    // GS REQUIRED LIBS
+    testCompile 'org.springframework:spring-aop:3.2.4.RELEASE'
+    testCompile 'org.springframework:spring-aspects:3.2.4.RELEASE'
+    testCompile 'org.springframework:spring-beans:3.2.4.RELEASE'
+    testCompile 'org.springframework:spring-context:3.2.4.RELEASE'
+    testCompile 'org.springframework:spring-context-support:3.2.4.RELEASE'
+    testCompile 'org.springframework:spring-core:3.2.4.RELEASE'
+    testCompile 'org.springframework:spring-expression:3.2.4.RELEASE'
+    testCompile 'org.springframework:spring-tx:3.2.4.RELEASE'
+    testCompile 'commons-logging:commons-logging:1.1.3'
+    testCompile 'aopalliance:aopalliance:1.0'
 
 }
 
@@ -63,12 +58,13 @@ tasks.withType(ScalaCompile) {
         memoryMaximumSize = '4g'
         jvmArgs = ['-XX:MaxPermSize=512m']
     }
+    scalaCompileOptions.useAnt = false
     scalaCompileOptions.setAdditionalParameters(['-feature'])
 }
 
 task test(overwrite: true, dependsOn: testClasses) << {
-    ant.taskdef(name: 'scalatest', classname: 'org.scalatest.tools.ScalaTestAntTask'
-            , classpath: sourceSets.test.runtimeClasspath.asPath)
-    ant.scalatest(runpath: sourceSets.test.output.classesDir
-            , haltonfailure: 'true', fork: 'false') { reporter(type: 'junitxml', directory: 'target') }
+    ant.taskdef(name: 'scalatest', classname: 'org.scalatest.tools.ScalaTestAntTask' , classpath: sourceSets.test.runtimeClasspath.asPath)
+    ant.scalatest(runpath: sourceSets.test.output.classesDir, haltonfailure: 'true', fork: 'false') {
+        reporter(type: 'stdout')
+    }
 }

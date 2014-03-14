@@ -46,7 +46,7 @@ abstract class GsI10nSuite extends FunSuite with BeforeAndAfterAllConfigMap with
 
   private val defaults = Map[String, Any](
     schemaProperty -> "partitioned-sync2backup"
-    , numInstancesProperty -> int2Integer(2)
+    , numInstancesProperty -> int2Integer(1)
     , numBackupsProperty -> int2Integer(1)
     , instanceIdProperty -> int2Integer(1)
     , spaceUrlProperty -> "/./space"
@@ -69,14 +69,10 @@ abstract class GsI10nSuite extends FunSuite with BeforeAndAfterAllConfigMap with
 
   import SpaceMode._
 
-  private def getDefault[T](name: String): T = {
-    defaults.get(name).get.asInstanceOf[T]
-  }
-
   /* convenience methods */
 
   protected def spaceContents(): Int = {
-    assume( gigaSpace != null )
+    assume(gigaSpace != null)
     gigaSpace.count(new Object())
   }
 
@@ -94,15 +90,30 @@ abstract class GsI10nSuite extends FunSuite with BeforeAndAfterAllConfigMap with
     container.close()
   }
 
+  private def getProperty(propertyName: String, configMap: ConfigMap = new ConfigMap(Map[String, Any]())): Any = {
+    val prop = configMap.get(propertyName)
+    val innerP = prop match {
+      case (Some(p)) => p
+      case _ =>
+        defaults.get(propertyName)
+    }
+    innerP match {
+      case Some(q) => q
+      case _ =>
+        throw new UnsupportedOperationException(String.format("No value exists for property name: [%s].", propertyName))
+    }
+  }
+
   /* i10n infrastructure setup methods */
 
   private def createClusterInfo(configMap: ConfigMap = new ConfigMap(Map[String, Any]())): ClusterInfo = {
 
-    val schema = configMap.getOrElse(schemaProperty, getDefault(schemaProperty))
-    val numInstances = configMap.getOrElse(numInstancesProperty, getDefault(numInstancesProperty))
-    val numBackups = configMap.getOrElse(numBackupsProperty, getDefault(numBackupsProperty))
-    val instanceId = configMap.getOrElse(instanceIdProperty, getDefault(instanceIdProperty))
+    val schema = getProperty(schemaProperty, configMap)
+    val numInstances = getProperty(numInstancesProperty, configMap)
+    val numBackups = getProperty(numBackupsProperty, configMap)
+    val instanceId = getProperty(instanceIdProperty, configMap)
 
+    // not type-safe, but don't care
     val clusterInfo = new ClusterInfo
     clusterInfo.setSchema(schema.asInstanceOf[String])
     clusterInfo.setNumberOfInstances(numInstances.asInstanceOf[Integer])
@@ -112,16 +123,16 @@ abstract class GsI10nSuite extends FunSuite with BeforeAndAfterAllConfigMap with
 
   }
 
-  private def createGigaSpace(configMap: ConfigMap): GigaSpace = {
+  private def createGigaSpace(configMap: ConfigMap = new ConfigMap(Map[String, Any]())): GigaSpace = {
 
     def makeGs(configurer: UrlSpaceConfigurer): GigaSpace = {
       new GigaSpaceConfigurer(configurer).gigaSpace()
     }
 
-    val spaceUrl = configMap.getOrElse(spaceUrlProperty, getDefault(spaceUrlProperty))
-    val configurer = new UrlSpaceConfigurer(spaceUrl.asInstanceOf[String])
+    val spaceUrl = getProperty(spaceUrlProperty, configMap).asInstanceOf[String]
+    val configurer = new UrlSpaceConfigurer(spaceUrl)
 
-    configMap.getOrElse(spaceModeProperty, getDefault(spaceModeProperty)) match {
+    getProperty(spaceModeProperty, configMap) match {
       case Embedded =>
         makeGs(configurer)
       case Remote =>
@@ -129,7 +140,7 @@ abstract class GsI10nSuite extends FunSuite with BeforeAndAfterAllConfigMap with
       case LocalCache =>
         new GigaSpaceConfigurer(new LocalCacheSpaceConfigurer(configurer)).gigaSpace()
       case LocalView =>
-        val queries = configMap.getOrElse(localViewQueryListProperty, getDefault(localViewQueryListProperty)).asInstanceOf[List[SQLQuery[_]]]
+        val queries = getProperty(localViewQueryListProperty, configMap).asInstanceOf[List[SQLQuery[_]]]
         val viewConfigurer = new LocalViewSpaceConfigurer(configurer)
         queries.foreach(qry => {
           viewConfigurer.addViewQuery(qry)
@@ -142,12 +153,16 @@ abstract class GsI10nSuite extends FunSuite with BeforeAndAfterAllConfigMap with
   private def createProvider(configMap: ConfigMap): ProcessingUnitContainerProvider = {
     val containerProvider = new IntegratedProcessingUnitContainerProvider
     containerProvider.setClusterInfo(createClusterInfo(configMap))
-    containerProvider.addConfigLocation(configMap.getOrElse(configLocationProperty, getDefault(configLocationProperty)).asInstanceOf[String])
+    containerProvider.addConfigLocation(getProperty(configLocationProperty, configMap).asInstanceOf[String])
     containerProvider
   }
 
   private def createContainer(configMap: ConfigMap): ProcessingUnitContainer = {
     containerProvider.createContainer()
+  }
+
+  test("failing test, on purpose") {
+    assert(1 + 1 + 1 === 2)
   }
 
 }

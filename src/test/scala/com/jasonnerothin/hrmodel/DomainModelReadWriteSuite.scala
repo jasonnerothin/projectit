@@ -18,7 +18,7 @@ package com.jasonnerothin.hrmodel
 
 import com.jasonnerothin.GsI10nSuite
 import com.jasonnerothin.project.hrmodel.Salary
-import org.scalatest.{Assertions, ConfigMap}
+import org.scalatest.ConfigMap
 
 /** Created by IntelliJ IDEA.
   * User: jason
